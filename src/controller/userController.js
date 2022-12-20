@@ -287,7 +287,7 @@ module.exports.loginUser=loginUser
 
 
 
-//update
+//*******************************************************update************************************************
 
 
 const updateUser = async function (req, res) {

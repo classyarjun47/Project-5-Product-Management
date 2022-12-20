@@ -9,8 +9,9 @@ const userController = require("../controller/userController")
 
 
 
-router.post("/register" , userController.createUser)
+router.post("/register" , userController.register)
 router.post("/login",userController.loginUser)
+router.put("/update", userController.updateUser)
 
 
 module.exports=router
