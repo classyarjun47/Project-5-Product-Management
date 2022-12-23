@@ -1,30 +1,62 @@
-const express = require('express');
+const express = require("express");
 const router = express.Router();
-const UserController = require("../controller/userController");
-const ProductController = require("../controller/productController");
-//const CartController = require("../controller/cartController")
-//const OrderController = require("../controller/orderController")
-const mw = require("../middleware/auth");
+const userController = require("../controller/userController");
+const productController = require("../controller/productController");
+const cartController = require("../controller/cartController");
+//const orderController = require("../controller/orderCotroller");
+const auth = require("../middleware/auth");
 
-//**********user api ******************
-router.post("/register", UserController.register);
+//user Apis
+router.post("/register", userController.createUser);
+router.post("/login", userController.login);
+router.get(
+  "/user/:userId/profile",
+  auth.Authentication,
+  auth.Authorisation,
+  userController.getUser
+);
+router.put(
+  "/user/:userId/profile",
+  auth.Authentication,
+  auth.Authorisation,
+  userController.update
+);
 
-router.post("/login", UserController.loginUser);
+//product Apis
+router.post("/products", productController.createProduct);
+router.get("/products", productController.getByQuery);
+router.get("/products/:productId", productController.getById);
+router.put("/products/:productId", productController.updateProduct);
+router.delete("/products/:productId", productController.deleteById);
+//cart Apis
+router.post(
+  "/users/:userId/cart",
+  auth.Authentication,
+  auth.Authorisation,
+  cartController.createCart
+);
+router.get(
+  "/users/:userId/cart",
+  auth.Authentication,
+  auth.Authorisation,
+  cartController.getCart
+);
+router.put(
+  "/users/:userId/cart",
+  auth.Authentication,
+  auth.Authorisation,
+  cartController.updateCart
+);
+router.delete(
+  "/users/:userId/cart",
+  auth.Authentication,
+  auth.Authorisation,
+  cartController.deleteCart
+);
 
-//router.get("/user/:userId/profile", mw.authentication, mw.authorisation, UserController.);
 
-router.put('/user/:userId/profile', mw.auth,  UserController.updateUser);
-//*************product api***************
-router.post('/products', ProductController.createProduct);
-
-router.get("/products", ProductController.getProduct);
-
-router.get("/products/:productId", ProductController.getProductById);
-
-
-router.post("/products/:productId", ProductController.updateProductById);
-
-router.delete("/products/:productId", ProductController.deleteProductById);
-
+router.all("/*", function (req, res) {
+  res.status(400).send("Invalid request....!!!");
+});
 
 module.exports = router;

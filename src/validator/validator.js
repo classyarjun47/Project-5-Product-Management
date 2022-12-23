@@ -1,99 +1,86 @@
-//!============================***** validation *******===========================================//
-const bcrypt = require("bcrypt")
-const mongoose = require("mongoose")
+const mongoose = require("mongoose");
 
-const isValid = (value) => {
+const isValidName = function (value) {
+  if (
+    typeof value === "string" &&
+    value.trim().length > 0 &&
+    /^[A-Z][a-z]*(\s[A-Z][a-z]*)*$/.test(value)
+  )
+    return true;
+  return false;
+};
+const isValid = function (value) {
+  if (typeof value === "string" && value.trim().length > 0) return true;
+  return false;
+};
+const isValidPassword = function (value) {
+  if (
+    /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,15}$/.test(
+      value
+    )
+  )
+    return true;
+  return false;
+};
+const isValidEmail = function (value) {
+  if (/^\w+@[a-zA-Z_]+?\.[a-zA-Z]{2,3}$/.test(value)) return true;
+  return false;
+};
+const isValidDate = function (value) {
+  if (/^\d{4}\-(0[1-9]|1[012])\-(0[1-9]|[12][0-9]|3[01])$/.test(value))
+    return true;
+  return false;
+};
 
-    if (typeof value != 'string') return false
-    if (typeof value === 'undefined' || typeof value === null) { return false }
+const isValidTitle = function (title) {
+  return ["Mr", "Mrs", "Miss"].includes(title);
+};
 
-    if (typeof value === 'string' && value.trim().length == 0) { return false }
+const isValidMobile = function (value) {
+  if (typeof value === "string" && /^[0-9]\d{9}$/gi.test(value)) return true;
+  return false;
+};
+const isValidPincode = function (value) {
+  if (typeof value === "string" && /^[0-9]\d{5}$/gi.test(value)) return true;
+  return false;
+};
 
-    return true
-}
+const isValidRequestBody = function (requestBody) {
+  return Object.keys(requestBody).length > 0;
+};
 
-const isValidRequestBody = (body) => {
-    return (Object.keys(body).length > 0)
+const isValidObjectId = function (objectId) {
+  return mongoose.isValidObjectId(objectId);
+};
 
-}
-
-
-
-const isValidEmail = (email) => {
-    return /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(email);
-}
-
-const isValidPincode = (pincode) => {
-    return /^[1-9][0-9]{5}$/.test(pincode);
-}
-
-const isValidPhone = (phone) => {
-    return (/^[6-9]\d{9}$/.test(phone))
-}
-
-const hashedPassword = async (password) => {
-    let p1 = await bcrypt.hash(password, 10)
-    return p1
-}
-
-const isValidImage = (image) => {
-    if (/.*\.(jpeg|jpg|png)$/.test(image.originalname)) {
-        return true
-    }
-    return false
-}
-
-const isvalidPass = (password) => {
-    if (password.length > 15 || password.length < 8) { return false }
-    return true
-
-}
-
-const isValidObjectId = (ObjectId) => {
-    return mongoose.Types.ObjectId.isValid(ObjectId)
-}
-
-const isValidNumber = function (value) {
-    return (!isNaN(value) && value > 0)
-}
-
-const isValidBoolean = (value) => {
-    return (value === 'true' || value === 'false')
-}
-
-const isValidSize = (Arr) => {
-    let newArr = []
-    if (!Arr.length > 0)
-        return false
-
-    for (let i = 0; i < Arr.length; i++) {
-        if (!["S", "XS", "M", "X", "L", "XXL", "XL"].includes(Arr[i].toUpperCase())) {
-            return false
-        }
-        newArr.push(Arr[i].toUpperCase())
-    }
-    return newArr
-}
-
-
-
-const isValidCharacters = (value) => {
-    return /^[A-Za-z]+$/.test(value)
-}
+const isStringsArray = function (arr) {
+  if (!Array.isArray(arr)) return false;
+  for (let i = 0; i < arr.length; i++) {
+    if (!["S", "XS", "M", "X", "L", "XXL", "XL"].includes(arr[i])) return false;
+  }
+  return true;
+};
+const isValidAddress = function (obj) {
+  const { street, city, pincode } = obj;
+  if (!isValid(street)) return false;
+  if (!isValid(city)) return false;
+  if (!isValidPincode(pincode)) return false;
+  return true;
+};
 
 module.exports = {
-    
-    isValid,
-    isValidEmail,
-    isValidPincode,
-    isValidRequestBody,
-    isValidPhone,
-    hashedPassword,
-    isvalidPass,
-    isValidImage,
-    isValidObjectId,
-    isValidNumber,
-    isValidBoolean,
-    isValidSize,
-    isValidCharacters
-}
+  isValid,
+  isValidTitle,
+  isValidRequestBody,
+  isValidObjectId,
+  isValidPassword,
+  isValidEmail,
+  isStringsArray,
+  isValidName,
+  isValidMobile,
+  isValidDate,
+  isValidAddress,
+  isValidPincode,
+};
+
+// console.log(typeof 122);

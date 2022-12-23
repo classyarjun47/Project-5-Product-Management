@@ -1,63 +1,28 @@
-const mongoose = require('mongoose');
-const ObjectId = mongoose.Types.ObjectId
+const mongoose = require("mongoose");
+const ObjectId = mongoose.Schema.Types.ObjectId;
 
-const orderSchema = new mongoose.Schema({
-
-    userId: {
-        type:ObjectId,
-        require:true
-     },
-
-    items: [{
-        productId: {
-            type: ObjectId,
-            ref: product,
-            required: true
-        },
-
-        quantity: {
-            type: number,
-            required: true,
-            min: 1
-        }
-    }],
-
-    totalPrice: {
-        type: number,
-        required: true,
-    },
-
-    totalItems: {
-        type: number,
-        required: true
-    },
-    totalQuantity: {
-        type: number,
-        required: true
-    },
-
-    cancellable: {
-        type: boolean,
-        default: true
-    },
-
+const orderSchema = new mongoose.Schema(
+  {
+    userId: { type: ObjectId, ref: "user", required: true },
+    items: [
+      {
+        productId: { type: ObjectId, ref: "Product", required: true },
+        quantity: { type: Number, required: true, minLength: 1 },
+      },
+    ],
+    totalPrice: { type: Number, required: true },
+    totalItems: { type: Number, required: true },
+    totalQuantity: { type: Number, required: true },
+    cancellable: { type: Boolean, default: true },
     status: {
-        type: string,
-        default:'pending',
-        enum: [pending, completed, cancled]
+      type: String,
+      default: "pending",
+      enum: ["pending", "completed", "canceled"],
     },
-    deletedAt: {
-        type: Date,
-        //default: null
-    },
+    deletedAt: { type: Date },
+    isDeleted: { type: Boolean, default: false },
+  },
+  { timestamps: true }
+);
 
-    isDeleted: {
-        type: boolean,
-        default: false
-    },
-
-},
-    { timestamps: true })
-
-
-module.exports = mongoose.model('order', orderSchema)
+module.exports = mongoose.model("Order", orderSchema);
