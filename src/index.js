@@ -7,7 +7,7 @@ const app = express();
 
 app.use(express.json());
 app.use(multer().any());
-
+mongoose.set('strictQuery', false);
 mongoose.connect(
     "mongodb+srv://iammonag:rajmona24@cluster1.hsmwmii.mongodb.net/project5?retryWrites=true&w=majority",
     {
