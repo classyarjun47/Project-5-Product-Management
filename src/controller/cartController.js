@@ -28,15 +28,15 @@ const createCart = async function (req, res) {
           .status(400)
           .send({ status: false, message: "please  enter a valid productID" });
     } else {
-      return res
-        .status(400)
-        .send({ status: false, message: "productID is required." });
+      return res.status(400).send({ status: false, message: "productID is required." });
     }
 
-    let validUser = await userModel.findOne({ _id: userId, isDeleted: false });
+    let validUser = await userModel.findOne({ _id: userId });
+    //console.log(validUser)
+    //console.log(userId)
     if (!validUser)
       return res.status(404).send({ status: false, message: "user not found" });
-
+    
     let validProduct = await productModel.findOne({
       _id: productId,
       isDeleted: false,
