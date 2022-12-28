@@ -19,7 +19,7 @@ router.get("/products/:productId", productController.getById);
 router.put("/products/:productId", productController.updateProduct);
 router.delete("/products/:productId", productController.deleteById);
 //cart Apis
-router.post("/users/:userId/cart",cartController.createCart);
+router.post("/users/:userId/cart",auth.Authentication,auth.Authorisation,cartController.createCart);
 router.get("/users/:userId/cart",auth.Authentication,auth.Authorisation,cartController.getCart);
 router.put("/users/:userId/cart",auth.Authentication,auth.Authorisation,cartController.updateCart);
 router.delete("/users/:userId/cart",auth.Authentication,auth.Authorisation,cartController.deleteCart);
